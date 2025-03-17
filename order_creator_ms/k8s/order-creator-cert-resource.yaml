@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: order-creator-certificate
+  namespace: backend
+spec:
+  secretName: order-creator-tls  # This should match Ingress
+  issuerRef:
+    name: order-creator-letsencrypt-prod  # Use the correct ClusterIssuer
+    kind: ClusterIssuer
+  commonName: order-creator.com
+  dnsNames:
+    - order-creator.com
+  usages:
+    - digital signature
+    - key encipherment

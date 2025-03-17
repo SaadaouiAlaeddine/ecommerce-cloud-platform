@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: acme-test-server
+  namespace: backend
+spec:
+  containers:
+  - name: web-server
+    image: nginx:alpine
+    volumeMounts:
+    - name: acme-challenge-volume
+      mountPath: /usr/share/nginx/html/.well-known/acme-challenge
+  volumes:
+  - name: acme-challenge-volume
+    configMap:
+      name: acme-challenge-config

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-acme-challenge
+  namespace: backend
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: order-creator.com
+      http:
+        paths:
+          - path: /.well-known/acme-challenge/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: order-creator-service
+                port:
+                  number: 80

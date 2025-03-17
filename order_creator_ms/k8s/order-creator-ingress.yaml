@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: order-creator-ingress
+  namespace: backend
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"  # Disable SSL redirect
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: order-creator.com
+      http:
+        paths:
+          - path: /.well-known/acme-challenge/*
+            pathType: ImplementationSpecific  # Allow wildcard matching for the challenge path
+            backend:
+              service:
+                name: order-creator-service
+                port:
+                  number: 80  # Exposed HTTP port (only port 80 for the challenge)
+          # Forward all other traffic to the service on port 80 (HTTP)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: order-creator-service
+                port:
+                  number: 80  # All traffic should go to port 80 (HTTP)

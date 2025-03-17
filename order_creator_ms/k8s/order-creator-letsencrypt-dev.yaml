@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: order-creator-letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 3alaeddine@gmail.com
+    privateKeySecretRef:
+      name: order-creator-letsencrypt-prod-key
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

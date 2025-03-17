@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-creator-deployment
+  namespace: backend
+  annotations:
+    consul.hashicorp.com/connect-inject: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-creator
+  template:
+    metadata:
+      labels:
+        app: order-creator
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/connect-service: "order-creator"
+        consul.hashicorp.com/connect-service-port: "80"
+        consul.hashicorp.com/transparent-proxy: "false"
+        consul.hashicorp.com/connect-service-upstreams: 'stock-service:6128'
+    spec:
+      containers:
+      - name: order-app
+        image: 3alaeddine/order-creator
+        env:
+          - name: RABBITMQ_HOST
+            value: "my-rabbitmq.rabbitmq.svc.cluster.local"
+          - name: RABBITMQ_PORT
+            value: "5672"
+          - name: RABBITMQ_ORDER_EXCHANGE
+            value: "order-exchange"
+          - name: RABBITMQ_EXCHANGE_TYPE
+            value: "direct"
+          - name: RABBITMQ_USERNAME
+            value: "admin"
+          - name: RABBITMQ_PASSWORD
+            value: "adminpassword"
+          - name: RABBITMQ_VHOST
+            value: "/"
+          - name: REDIS_HOST
+            value: "redis.redis.svc.cluster.local"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_DB
+            value: "0"
+          - name: KEYCLOAK_HOST
+            value: "keycloak.keycloak.svc.cluster.local"
+          - name: KEYCLOAK_REALM
+            value: "order-management-realm"
+        resources:
+          requests:
+            cpu: "100m"     # Minimum 100m (0.1 core)
+            memory: "128Mi" # Minimum 128Mi memory
+          limits:
+            cpu: "500m"     # Max 500m (0.5 core)
+            memory: "512Mi" # Max 512Mi memory
+        ports:
+          - name: ingress-port
+            containerPort: 80

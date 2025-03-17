@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: acme-challenge-config
+  namespace: backend
+data:
+  test-token: "test-challenge-response"

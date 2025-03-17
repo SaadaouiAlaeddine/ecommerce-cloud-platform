@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-creator-loadtest-deployment
+  namespace: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-creator-loadtest
+  template:
+    metadata:
+      labels:
+        app: order-creator-loadtest
+    spec:
+      containers:
+        - name: order-creator-loadtest
+          image: 3alaeddine/order-creator-loadtest-img  # Use our minimal Locust image
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: locust-script-volume
+              mountPath: /locust/locustfile.py
+              subPath: locustfile.py
+          command: ["locust"]
+          args:
+            - "--host"
+            - "http://order-creator-service.backend.svc.cluster.local"
+            - "--web-host"
+            - "0.0.0.0"
+            - "--web-port"
+            - "80"
+        - name: locust-exporter
+          image: containersol/locust_exporter
+          env:
+            - name: LOCUST_EXPORTER_URI
+              value: "http://order-creator-loadtest-service.backend.svc.cluster.local:80"  # Use service DNS
+          ports:
+            - name: metrics
+              containerPort: 9646
+      volumes:
+        - name: locust-script-volume
+          configMap:
+            name: order-creator-loadtest-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-creator-loadtest-service
+  namespace: backend
+  labels:
+    app: order-creator-loadtest
+spec:
+  selector:
+    app: order-creator-loadtest
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80  # Fix: Match Locust UI default port
+      targetPort: 80
+    - name: metrics
+      protocol: TCP
+      port: 9646  # Expose Locust Exporter metrics for Prometheus
+      targetPort: 9646
+  type: LoadBalancer
