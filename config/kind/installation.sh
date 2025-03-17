@@ -1,0 +1,1 @@
+kind create cluster --config /Users/alaeddinesaadaoui/PycharmProjects/ecommerce-cloud-platform/config/kind/clusters-def.yaml
