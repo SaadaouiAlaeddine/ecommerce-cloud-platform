@@ -10,6 +10,4 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
-      nodePort: 30000  # NodePort value
-  type: NodePort  # Change to NodePort
- # Change to NodePort
+  type: LoadBalancer
