@@ -1,0 +1,13 @@
+ helm install kafka bitnami/kafka --namespace kafka \
+  --set persistence.enabled=true \
+  --set persistence.size=8Gi \
+  --set persistence.storageClass=manual \
+  --set replicaCount=1 \
+  --set service.type=LoadBalancer \
+  --set externalAccess.enabled=true \
+  --set externalAccess.service.type=LoadBalancer \
+  --set externalAccess.service.port=9094 \
+  --set externalAccess.autoDiscovery.enabled=true \
+  --set rbac.create=true \
+  --set controller.automountServiceAccountToken=true \
+  --set broker.automountServiceAccountToken=true
