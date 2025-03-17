@@ -1,0 +1,52 @@
+executor: KubernetesExecutor
+
+# Web server settings
+webserver:
+  service:
+    type: LoadBalancer
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+# Secret configuration
+config:
+  webserver:
+    secret_key: "my-webserver-secret"
+
+# Scheduler settings
+scheduler:
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+# Database settings
+postgresql:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 8Gi
+
+# DAGs persistence
+dags:
+  persistence:
+    enabled: true
+    size: 3Gi
+    storageClassName: "standard"
+
+# Disable logs persistence to avoid access mode issues
+logs:
+  persistence:
+    enabled: false
+
+# Disable worker persistence to simplify
+workers:
+  persistence:
+    enabled: false
