@@ -7,3 +7,5 @@
 out
 gen
 /port-forward.log
+/minikube-tunnel.log
+/nohup.out
