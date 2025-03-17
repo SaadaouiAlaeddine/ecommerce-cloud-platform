@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  namespace: rabbitmq
+data:
+  rabbitmq.conf: |
+    listeners.tcp.default = 5672
+    management.tcp.port = 15672
+    rabbitmq_management.listener.port = 15672
+    queue_master_locator = min-masters
+    default_vhost = /
+  enabled_plugins: |
+    [rabbitmq_management, rabbitmq_amqps, rabbitmq_mqtt]

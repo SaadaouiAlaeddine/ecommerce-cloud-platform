@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rabbitmq-job
+  namespace: rabbitmq
+spec:
+  template:
+    metadata:
+      labels:
+        app: rabbitmq  # Adding labels here to match the Service selector
+      name: rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: bitnami/rabbitmq:latest
+        envFrom:
+        - configMapRef:
+            name: rabbitmq-config
+        ports:
+        - containerPort: 5672  # AMQP
+        - containerPort: 15672 # Management UI
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /bitnami/rabbitmq  # Mount the PVC to RabbitMQ's data path
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: rabbitmq-pvc  # Use the PVC for persistent storage
+      restartPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: rabbitmq  # Ensure the service is in the same namespace
+spec:
+  ports:
+    - port: 5672
+      targetPort: 5672
+    - port: 15672
+      targetPort: 15672
+  selector:
+    app: rabbitmq  # Matches the label of the pod template in the Job
+  type: LoadBalancer
