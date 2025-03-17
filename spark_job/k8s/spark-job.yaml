@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-word-count
+  namespace: spark
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: spark-job
+          image: 3alaeddine/simple-spark-python
+          args: [
+            "--master", "local[*]",
+            "--conf", "spark.driver.memory=512m",
+            "local:///opt/spark/work-dir/main.py"
+          ]
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "1Gi"
+              cpu: "2"

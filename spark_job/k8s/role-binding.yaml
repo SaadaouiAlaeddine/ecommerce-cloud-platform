@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: spark-operator-spark-rolebinding
+  namespace: spark-operator
+subjects:
+- kind: ServiceAccount
+  name: spark-operator-spark
+  namespace: spark-operator
+roleRef:
+  kind: ClusterRole
+  name: spark-operator-role  # Ensure this matches the role you're binding
+  apiGroup: rbac.authorization.k8s.io
