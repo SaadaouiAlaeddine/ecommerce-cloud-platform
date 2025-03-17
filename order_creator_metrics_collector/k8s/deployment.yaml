@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-creator-metrics-collector
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-creator-metrics-collector
+  template:
+    metadata:
+      labels:
+        app: order-creator-metrics-collector
+    spec:
+      containers:
+        - name: order-creator-metrics-collector
+          image: 3alaeddine/order-creator-metrics-collector
+          args:
+            # First replica for monitoring a queue named "priority"
+            - "--target=priority"
+            - "--type=queue"
+            - "--port=8000"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: RABBITMQ_HOST
+              value: "my-rabbitmq.rabbitmq.svc.cluster.local"
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USERNAME
+              value: "admin"
+            - name: RABBITMQ_PASSWORD
+              value: "adminpassword"
+            - name: RABBITMQ_VHOST
+              value: "/"
+        - name: order-creator-metrics-collector
+          image: 3alaeddine/order-creator-metrics-collector
+          args:
+            # Second replica for monitoring an exchange named "orders"
+            - "--target=orders"
+            - "--type=exchange"
+            - "--port=8001"
+          ports:
+            - containerPort: 8001
+          env:
+            - name: RABBITMQ_HOST
+              value: "my-rabbitmq.rabbitmq.svc.cluster.local"
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USERNAME
+              value: "admin"
+            - name: RABBITMQ_PASSWORD
+              value: "adminpassword"
+            - name: RABBITMQ_VHOST
+              value: "/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-creator-metrics-collector
+spec:
+  selector:
+    app: order-creator-metrics-collector
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
