@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+  namespace: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-ms
+  template:
+    metadata:
+      labels:
+        app: order-ms
+    spec:
+      containers:
+      - name: order-app
+        image: 3alaeddine/order-app
+        env:
+          - name: DB_HOST
+            value: "postgres.postgres.svc.cluster.local"
+          - name: DB_PORT
+            value: "5432"  # Replace with your database port
+          - name: DB_USER
+            value: "order_user"
+          - name: DB_PASSWORD
+            value: "order"
+          - name: DB_NAME
+            value: "ecommerce"
+        ports:
+        - containerPort: 6123
