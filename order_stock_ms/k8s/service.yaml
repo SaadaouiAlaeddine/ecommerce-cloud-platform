@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-service
+  namespace: backend
+spec:
+  selector:
+    app: stock
+  ports:
+    - name: http-6128-port  # Exposing port 6128 for HTTP challenge
+      protocol: TCP
+      port: 6128
+      targetPort: 6128
+  type: LoadBalancer

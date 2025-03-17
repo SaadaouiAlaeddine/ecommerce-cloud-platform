@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-deployment
+  namespace: backend
+  annotations:
+    consul.hashicorp.com/connect-inject: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stock
+  template:
+    metadata:
+      labels:
+        app: stock
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+    spec:
+      containers:
+      - name: stock-app
+        image: 3alaeddine/stock
+        resources:
+          requests:
+            cpu: "100m"     # Minimum 100m (0.1 core)
+            memory: "128Mi" # Minimum 128Mi memory
+          limits:
+            cpu: "500m"     # Max 500m (0.5 core)
+            memory: "512Mi" # Max 512Mi memory
+        ports:
+        - containerPort: 6128
