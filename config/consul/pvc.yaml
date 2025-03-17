@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: consul-pvc
+  namespace: consul  # Make sure it's in the same namespace where Consul is running
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Request the same storage size as the PV
+  storageClassName: standard  # Use the same storage class as the PV

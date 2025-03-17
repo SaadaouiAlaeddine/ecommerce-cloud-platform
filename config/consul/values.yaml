@@ -1,0 +1,38 @@
+global:
+  image: "hashicorp/consul:latest"
+  peering:
+    enabled: true
+  tls:
+    enabled: true
+
+server:
+  replicas: 1
+  bootstrapExpect: 1
+  extraConfig: |
+    {
+      "log_level": "TRACE"
+    }
+  persistentVolume:
+  enabled: true
+  size: 1Gi
+  storageClass: "standard"
+  accessMode: ReadWriteOnce
+  persistentVolumeClaim:
+    claimName: consul-pvc
+
+connectInject:
+  enabled: true
+  default: false
+
+meshGateway:
+  enabled: true
+  replicas: 1
+
+controller:
+  enabled: true
+
+ui:
+  enabled: true
+  service:
+    enabled: true
+    type: LoadBalancer
