@@ -1,0 +1,30 @@
+# keycloak-values.yaml
+keycloak:
+  replicaCount: 1
+  service:
+    type: LoadBalancer  # Set LoadBalancer for external access
+
+  persistence:
+    enabled: true
+    existingClaim: ""  # Use an existing PVC or leave blank to create a new one
+    storageClass: "standard"  # Modify if you're using a different storage class
+    size: 2Gi  # Set desired size for PVC
+
+  ingress:
+    enabled: false  # Set to true if you want to use Ingress for routing
+
+postgresql:
+  enabled: true  # Enable PostgreSQL deployment within the same namespace
+  postgresqlPassword: "your_password"  # Set password for the PostgreSQL database
+  postgresqlDatabase: "keycloak"  # Database name for Keycloak to use
+  postgresqlUsername: "keycloak"  # Username for PostgreSQL
+  postgresqlPostgresDatabase: "postgres"  # Default PostgreSQL database
+  persistence:
+    enabled: true
+    existingClaim: ""  # Use an existing PVC or leave blank to create a new one
+    storageClass: "standard"  # Modify if you're using a different storage class
+    size: 2Gi  # Set desired size for PVC
+  service:
+    type: LoadBalancer  # Expose PostgreSQL using a LoadBalancer service
+    port: 5432          # Default PostgreSQL port
+    targetPort: 5432

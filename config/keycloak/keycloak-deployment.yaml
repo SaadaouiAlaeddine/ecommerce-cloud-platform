@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: keycloak-pvc
+  namespace: keycloak
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: keycloak-pv
+  namespace: keycloak
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  hostPath:
+    path: /Users/alaeddinesaadaoui/tools/keycloak
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-deployment
+  namespace: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:latest
+        command: ["/opt/keycloak/bin/kc.sh"]
+        args:
+          - "start-dev"            # First argument
+        env:
+        - name: KC_BOOTSTRAP_ADMIN_USERNAME
+          value: "admin"  # Admin user
+        - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+          value: "admin"
+        - name: DB_VENDOR
+          value: "postgres"
+        - name: DB_ADDR
+          value: "postgres.postgres.svc.cluster.local"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_DATABASE
+          value: "keycloak"
+        - name: DB_USER
+          value: "keycloak_user"
+        - name: DB_PASSWORD
+          value: "yourpassword"
+        - name: KEYCLOAK_PROFILE
+          value: "standalone"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - name: keycloak-storage
+            mountPath: /opt/keycloak/standalone/data
+      volumes:
+        - name: keycloak-storage
+          persistentVolumeClaim:
+            claimName: keycloak-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: keycloak
+  type: LoadBalancer
