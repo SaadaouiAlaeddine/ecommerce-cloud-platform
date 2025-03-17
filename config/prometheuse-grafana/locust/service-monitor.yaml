@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: order-creator-loadtest-monitor
+  namespace: prometheus
+  labels:
+    release: prom
+spec:
+  selector:
+    matchLabels:
+      app: order-creator-loadtest
+  namespaceSelector:
+    matchNames:
+      - backend
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s

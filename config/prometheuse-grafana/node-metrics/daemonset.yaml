@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-metrics-exporter
+  namespace: prometheus
+  labels:
+    app: node-metrics-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-metrics-exporter
+  template:
+    metadata:
+      labels:
+        app: node-metrics-exporter
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: node-metrics-exporter
+          image: prom/node-exporter:v1.7.0
+          args:
+            - "--path.procfs=/host/proc"
+            - "--path.sysfs=/host/sys"
+            - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($|/)"
+            - '--web.listen-address=:9110'
+          ports:
+            - containerPort: 9110
+              name: metrics
+          volumeMounts:
+            - name: proc
+              mountPath: /host/proc
+              readOnly: true
+            - name: sys
+              mountPath: /host/sys
+              readOnly: true
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys

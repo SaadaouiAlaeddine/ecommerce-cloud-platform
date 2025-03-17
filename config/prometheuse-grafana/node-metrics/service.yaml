@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-metrics-exporter-service
+  namespace: prometheus
+  labels:
+    app: node-metrics-exporter
+spec:
+  selector:
+    app: node-metrics-exporter
+  ports:
+    - name: metrics
+      port: 9110
+      targetPort: 9110
+  type: LoadBalancer

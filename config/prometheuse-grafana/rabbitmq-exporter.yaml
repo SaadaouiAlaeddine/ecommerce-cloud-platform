@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-exporter
+  namespace: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-exporter
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-exporter
+    spec:
+      containers:
+      - name: rabbitmq-exporter
+        image: "ghcr.io/kbudde/rabbitmq_exporter:latest"
+        ports:
+        - containerPort: 9419  # Corrected port for metrics
+        env:
+        - name: RABBITMQ_URL
+          value: "http://my-rabbitmq.rabbitmq.svc.cluster.local:15672"  # Use the RabbitMQ FQDN
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-exporter
+  namespace: prometheus
+spec:
+  ports:
+    - port: 9419      # Corrected port for metrics
+      targetPort: 9419 # Ensure the target port matches the exposed port
+  selector:
+    app: rabbitmq-exporter

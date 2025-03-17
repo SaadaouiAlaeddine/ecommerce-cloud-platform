@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-metrics-deployment
+  namespace: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-metrics
+  template:
+    metadata:
+      labels:
+        app: orders-metrics
+    spec:
+      containers:
+        - name: priority-orders-metrics-queue
+          image: 3alaeddine/order-metrics-libs-img:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - python /app/rabbitmq_metrics_collector.py --target=priority-orders --type=queue --port=8000
+          volumeMounts:
+            - name: script-volume
+              mountPath: /app
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+        - name: regular-orders-metrics-queue
+          image: 3alaeddine/order-metrics-libs-img:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - python /app/rabbitmq_metrics_collector.py --target=regular-orders --type=queue --port=8001
+          volumeMounts:
+            - name: script-volume
+              mountPath: /app
+          ports:
+            - containerPort: 8001
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8001
+        - name: orders-metrics-exchange
+          image: 3alaeddine/order-metrics-libs-img:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - python /app/rabbitmq_metrics_collector.py --target=order-exchange --type=exchange --port=8002
+          volumeMounts:
+            - name: script-volume
+              mountPath: /app
+          ports:
+            - containerPort: 8002
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8002
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8002
+      volumes:
+        - name: script-volume
+          configMap:
+            name: orders-metrics-configmap

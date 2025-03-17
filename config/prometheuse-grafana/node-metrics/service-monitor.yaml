@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: node-metrics-exporter-monitor
+  namespace: prometheus
+  labels:
+    release: prom
+spec:
+  selector:
+    matchLabels:
+      app: node-metrics-exporter`
+  endpoints:
+    - port: metrics
+      interval: 15s
+      scrapeTimeout: 10s

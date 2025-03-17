@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-metrics-service
+  namespace: prometheus
+  labels:
+    app: orders-metrics
+spec:
+  selector:
+    app: orders-metrics
+  ports:
+    - name: priority-orders-metrics
+      port: 8000
+      targetPort: 8000
+    - name: regular-orders-metrics
+      port: 8001
+      targetPort: 8001
+    - name: order-exchange-metrics
+      port: 8002
+      targetPort: 8002

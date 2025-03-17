@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orders-metrics-monitor
+  namespace: prometheus
+  labels:
+    release: prom
+spec:
+  endpoints:
+  - interval: 10s
+    path: /metrics
+    port: priority-orders-metrics
+  - interval: 10s
+    path: /metrics
+    port: regular-orders-metrics
+  - interval: 10s
+    path: /metrics
+    port: order-exchange-metrics
+  selector:
+    matchLabels:
+      app: orders-metrics
