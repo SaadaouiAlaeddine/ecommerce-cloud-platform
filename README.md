@@ -185,6 +185,9 @@ helm install cert-manager jetstack/cert-manager \
 - The regular orders come in different formats with different user/product attributes. So for fast storage and post-processing, a Mongo database will be used for storage. To enable Kafka streaming, replication has to be enabled. So the Mongo database is created with two replicas.
 <img width="690" alt="Screenshot 2025-03-19 at 4 00 26 PM" src="https://github.com/user-attachments/assets/19b3987b-ef2e-48c4-a23b-672bcc0c884f" />
 
+### $${\color{red}Kafka}$$ <br/>
+Kafka is deployed to enable realtime validation and processing of regular orders. The orders-topics will be a bridge between Mongo orders database and Spark jobs.
+<img width="1355" alt="Screenshot 2025-03-19 at 4 24 38 PM" src="https://github.com/user-attachments/assets/51d5c2ee-4138-45b2-899b-90ce9b7adbef" /><br/>
 
 ## Authors
 
