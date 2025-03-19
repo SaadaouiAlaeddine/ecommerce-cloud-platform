@@ -159,6 +159,29 @@ helm install cert-manager jetstack/cert-manager \
 <img width="565" alt="Screenshot 2025-03-19 at 8 40 43 AM" src="https://github.com/user-attachments/assets/32c3f2ce-6c35-4fd1-92f7-720e1ca54fdf" />
 <img width="1559" alt="Screenshot 2025-03-19 at 8 43 13 AM" src="https://github.com/user-attachments/assets/84cea0b6-2662-429e-a1d0-af8d1f6558e7" /><br/>
 
+### $${\color{red}Vault}$$ <br/>
+- Vault is deployed to store the microservices secrets. Kubernetes allows the secrets creation and encoding using Base64 but it doesn't secure it.
+<img width="1093" alt="Screenshot 2025-03-19 at 3 10 35 PM" src="https://github.com/user-attachments/assets/21a5c8c9-8623-4305-928d-ad4b2678e7c4" /><br/>
+- To use Keycloak as identity provider, JWT is enabled in vault and JWT Authentication Method is defined using Keycloak
+<img width="726" alt="Screenshot 2025-03-19 at 3 14 29 PM" src="https://github.com/user-attachments/assets/ad0df7c0-fa95-48bf-a7c8-041f6c79b26d" /><br/>
+- A role is created to connect to vault using the JWT of the Keycloak client
+<img width="1292" alt="Screenshot 2025-03-19 at 3 15 58 PM" src="https://github.com/user-attachments/assets/79f172fb-8f73-40d6-8815-11362b28abce" /><br/>
+- To enable the secrets access, the Vault policy vault-reader-scope is need to be created<br/>
+<img width="358" alt="Screenshot 2025-03-19 at 3 18 51 PM" src="https://github.com/user-attachments/assets/898a2268-9d09-4421-a490-2e3bcc59e507" /><br/>
+- At the code level, post request will be made to /v1/auth/jwt/login using the role name and the Keycloak JAWT to retrieve client token to access the microservice secretrs<br/>
+<img width="924" alt="Screenshot 2025-03-19 at 3 22 24 PM" src="https://github.com/user-attachments/assets/efa37a91-cf56-4b7c-9a8e-6a71164fc52c" /><br/>
+
+### $${\color{red}Rabbitmq}$$ <br/>
+- RabbitMQ is deployed to create the required exchanges and queues for orders processing.
+<img width="1484" alt="Screenshot 2025-03-19 at 3 29 26 PM" src="https://github.com/user-attachments/assets/96bc0809-ecea-438e-923f-40dda2272cf3" /><br/>
+- To simplify the messages flows, all the orders will be sent to a central exchange: order-exchange. Three queues and one exchange are bound to order-exchange
+<img width="1514" alt="Screenshot 2025-03-19 at 3 32 33 PM" src="https://github.com/user-attachments/assets/d49957fe-7535-49d3-8c1d-1ed1d04084cb" />
+- The created queues are durable and priority-orders queue is a priority queue to prioritize the incoming orders based on their priority values
+<img width="1014" alt="Screenshot 2025-03-19 at 3 36 15 PM" src="https://github.com/user-attachments/assets/cb19a84d-8e57-4189-9ef2-ac761ec9e457" />
+- The digital orders are separated and have their own exchange
+<img width="951" alt="Screenshot 2025-03-19 at 3 37 08 PM" src="https://github.com/user-attachments/assets/2cde25d1-e75b-4d42-98e9-15f00c70b415" />
+
+
 ## Authors
 
 - [@alaeddine saadaoui](https://github.com/SaadaouiAlaeddine)
