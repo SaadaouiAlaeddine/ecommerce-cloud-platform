@@ -181,6 +181,10 @@ helm install cert-manager jetstack/cert-manager \
 - The digital orders are separated and have their own exchange
 <img width="951" alt="Screenshot 2025-03-19 at 3 37 08 PM" src="https://github.com/user-attachments/assets/2cde25d1-e75b-4d42-98e9-15f00c70b415" />
 
+### $${\color{red}MongoDB}$$ <br/>
+- The regular orders come in different formats with different user/product attributes. So for fast storage and post-processing, a Mongo database will be used for storage. To enable Kafka streaming, replication has to be enabled. So the Mongo database is created with two replicas.
+<img width="690" alt="Screenshot 2025-03-19 at 4 00 26 PM" src="https://github.com/user-attachments/assets/19b3987b-ef2e-48c4-a23b-672bcc0c884f" />
+
 
 ## Authors
 
