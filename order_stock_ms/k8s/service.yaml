@@ -3,11 +3,15 @@ kind: Service
 metadata:
   name: stock-service
   namespace: backend
+  annotations:
+    consul.hashicorp.com/service-name: "stock-service"
+    consul.hashicorp.com/connect-service: "true"
+    consul.hashicorp.com/expose: "true"
 spec:
   selector:
     app: stock
   ports:
-    - name: http-6128-port  # Exposing port 6128 for HTTP challenge
+    - name: http-6128-port
       protocol: TCP
       port: 6128
       targetPort: 6128

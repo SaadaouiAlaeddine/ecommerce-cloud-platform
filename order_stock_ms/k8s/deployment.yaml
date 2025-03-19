@@ -16,6 +16,8 @@ spec:
         app: stock
       annotations:
         consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/transparent-proxy: "false"
+        consul.hashicorp.com/connect-service-port: "6128"
     spec:
       containers:
       - name: stock-app
