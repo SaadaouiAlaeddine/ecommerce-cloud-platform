@@ -119,6 +119,46 @@ helm install cert-manager jetstack/cert-manager \
   helm install airflow apache-airflow/airflow \
     --namespace airflow \
     --values /Users/alaeddinesaadaoui/PycharmProjects/ecommerce-cloud-platform/config/airflow/values.yaml
+## Components
+
+### $${\color{red}Consul}$$ <br/>
+- Consul is deployed to enable service discoverability
+<img width="1231" alt="Screenshot 2025-03-19 at 7 37 27 AM" src="https://github.com/user-attachments/assets/ea7ef003-e50b-49b0-bdc6-2c31554ca0a3" /><br/>
+- Intentions are created to define access between microservices
+<img width="1237" alt="Screenshot 2025-03-19 at 7 42 23 AM" src="https://github.com/user-attachments/assets/f18b2221-c65b-430d-916b-2e661b176080" />
+
+### $${\color{red}Keycloak}$$ <br/>
+- Keycloak is installed to define an identity layer for microservices to enable authentication and authorization features
+<img width="1249" alt="Screenshot 2025-03-19 at 8 09 41 AM" src="https://github.com/user-attachments/assets/b6e069a6-5ddf-40ed-8d3a-b19146f776c1" />
+<img width="1046" alt="Screenshot 2025-03-19 at 8 09 49 AM" src="https://github.com/user-attachments/assets/e838bd33-dbfc-445e-b1aa-812185d4a440" /><br/>
+
+- Scopes are required to define the required jwt entries, in this case the audience and roles are required to connect later on with vault
+<img width="1255" alt="Screenshot 2025-03-19 at 8 10 18 AM" src="https://github.com/user-attachments/assets/0005ab62-f14f-45d9-a792-d8a146313557" />
+<img width="1271" alt="Screenshot 2025-03-19 at 8 10 30 AM" src="https://github.com/user-attachments/assets/3995d5a2-fd62-4f1c-8a5e-7d0f09311d1e" /><br/>
+
+- Realm Roles with associated Client Roles are required to define the resource_access section in jwt
+<img width="1271" alt="Screenshot 2025-03-19 at 8 10 56 AM" src="https://github.com/user-attachments/assets/5e5295ec-a2b7-4eae-b897-0fa58d4f0827" />
+<img width="1258" alt="Screenshot 2025-03-19 at 8 11 04 AM" src="https://github.com/user-attachments/assets/ff0a8b1d-8763-4abc-b488-5cc5036c827c" /><br/>
+
+- The generated JWT contains the client scope and access_token using the client's credentials
+<img width="936" alt="Screenshot 2025-03-19 at 8 12 10 AM" src="https://github.com/user-attachments/assets/252f98c1-4c7b-4f3b-977b-a1a12a21fbaa" /><br/>
+
+- The decoded access token contains aud, resources_access and scope entries passed to vault to access microservice secrets
+<img width="579" alt="Screenshot 2025-03-19 at 10 15 32 AM" src="https://github.com/user-attachments/assets/90156fbf-f839-4a58-b21d-3c9d5b410b72" /><br/>
+
+- The generated JWT is signed using R256 algorithm, the kid entry will be used to fetch the public key from the keycloak certification entries<br/>
+<img width="569" alt="Screenshot 2025-03-19 at 10 16 11 AM" src="https://github.com/user-attachments/assets/fd894148-612d-4584-ac14-8d29efa61038" /><br/>
+
+- To enable JWT signature, a provided was added to the Keycloak realm with a generated certificate and private key
+<img width="1254" alt="Screenshot 2025-03-19 at 8 24 52 AM" src="https://github.com/user-attachments/assets/db8d0831-4103-4e41-baeb-7ec3aa1743dd" /><br/>
+
+- Using the same certificate and private key, we can verify the signature of JWT using jwt.io
+<img width="1224" alt="Screenshot 2025-03-19 at 8 27 12 AM" src="https://github.com/user-attachments/assets/7b95fa7b-3510-4100-95f8-1afd811f74ee" /><br/>
+
+- At the code level, the kid entry will be used to fetch the public key from the Keycloak certs page
+<img width="565" alt="Screenshot 2025-03-19 at 8 40 43 AM" src="https://github.com/user-attachments/assets/32c3f2ce-6c35-4fd1-92f7-720e1ca54fdf" />
+<img width="1559" alt="Screenshot 2025-03-19 at 8 43 13 AM" src="https://github.com/user-attachments/assets/84cea0b6-2662-429e-a1d0-af8d1f6558e7" /><br/>
+
 ## Authors
 
 - [@alaeddine saadaoui](https://github.com/SaadaouiAlaeddine)
