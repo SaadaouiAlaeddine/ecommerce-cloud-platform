@@ -9,3 +9,13 @@ gen
 /port-forward.log
 /minikube-tunnel.log
 /nohup.out
+# Ignore macOS system files
+.DS_Store
+config/.DS_Store
+config/prometheuse-grafana/.DS_Store
+order_creator_ms/.DS_Store
+order_creator_ms/app/.DS_Store
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
