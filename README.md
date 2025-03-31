@@ -189,6 +189,19 @@ helm install cert-manager jetstack/cert-manager \
 Kafka is deployed to enable realtime validation and processing of regular orders. The orders-topics will be a bridge between Mongo orders database and Spark jobs.
 <img width="1355" alt="Screenshot 2025-03-19 at 4 24 38 PM" src="https://github.com/user-attachments/assets/51d5c2ee-4138-45b2-899b-90ce9b7adbef" /><br/>
 
+### $${\color{red} API Authorization}$$ <br/>
+- To validate the jwt used for all the sensitive incomning requests, a decorator pattern is used to call a validation function validate_jwt. <br/>
+<img width="664" alt="Screenshot 2025-03-31 at 4 09 24 PM" src="https://github.com/user-attachments/assets/8f096400-f93b-468b-92ad-474a89072309" /><br/>
+
+- The validation function will fetch the authorization token to validate it. In case there is any issue, an error is raised.<br/>
+<img width="588" alt="Screenshot 2025-03-31 at 4 09 43 PM" src="https://github.com/user-attachments/assets/b19e211d-6633-4f66-b11c-022bb8a8f0f5" /><br/>
+
+- For non sensitive calls like healthcheck requests, the decorator is not used<br/>
+<img width="672" alt="Screenshot 2025-03-31 at 4 09 17 PM" src="https://github.com/user-attachments/assets/4ab49b33-c4b5-471e-93f2-572529701558" /><br/>
+
+- To automate token generation for test calls using postman, a pre-request script is added to generate the token and update the dev environment variable.<br/>
+<img width="1297" alt="Screenshot 2025-03-31 at 4 54 39 PM" src="https://github.com/user-attachments/assets/3c3c3bec-ff47-497c-b8f4-eb3135f2dfd3" />
+
 ## Authors
 
 - [@alaeddine saadaoui](https://github.com/SaadaouiAlaeddine)
