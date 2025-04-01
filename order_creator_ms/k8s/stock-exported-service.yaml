@@ -6,5 +6,5 @@ spec:
   services:
     - name: stock-service
       consumers:
-        - peer: "kind"  # Replace with your secondary datacenter name
+        - peer: "dc2"
 

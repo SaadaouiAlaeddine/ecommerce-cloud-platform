@@ -7,4 +7,4 @@ spec:
   failover:
     '*':
       targets:
-        - peer: 'kind2'
+        - peer: 'dc1'

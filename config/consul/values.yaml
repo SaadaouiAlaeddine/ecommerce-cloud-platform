@@ -1,5 +1,6 @@
 global:
   image: "hashicorp/consul:latest"
+  datacenter: "dc2"
   peering:
     enabled: true
   tls:
