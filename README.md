@@ -200,7 +200,31 @@ Kafka is deployed to enable realtime validation and processing of regular orders
 <img width="672" alt="Screenshot 2025-03-31 at 4 09 17 PM" src="https://github.com/user-attachments/assets/4ab49b33-c4b5-471e-93f2-572529701558" /><br/>
 
 - To automate token generation for test calls using postman, a pre-request script is added to generate the token and update the dev environment variable.<br/>
-<img width="1297" alt="Screenshot 2025-03-31 at 4 54 39 PM" src="https://github.com/user-attachments/assets/3c3c3bec-ff47-497c-b8f4-eb3135f2dfd3" />
+<img width="1297" alt="Screenshot 2025-03-31 at 4 54 39 PM" src="https://github.com/user-attachments/assets/3c3c3bec-ff47-497c-b8f4-eb3135f2dfd3" /><br/>
+
+### $${\color{red} Blue/Green Deployment}$$ <br/>
+
+- To enable B/G deployment, a second kind cluster is created with consul deployed and a mesh-gateway enabled.<br/>
+<img width="1164" alt="Screenshot 2025-04-01 at 12 31 52 PM" src="https://github.com/user-attachments/assets/8c88b2cf-2fd5-4d90-9fd7-26aff705c3ec" />
+
+- A peering connection should be established between the two clusters
+<img width="1165" alt="Screenshot 2025-04-01 at 12 12 52 PM" src="https://github.com/user-attachments/assets/42cadf6b-e584-4517-aa8b-18340dbc2c65" />
+
+
+- The service should be exported in the second cluster with indicating the main cluster(dc2) as a consumer.<br/>
+<img width="499" alt="Screenshot 2025-04-01 at 12 25 39 PM" src="https://github.com/user-attachments/assets/b78b6449-1209-43dd-88c9-381be0283950" /><br/>
+<img width="1148" alt="Screenshot 2025-04-01 at 12 39 19 PM" src="https://github.com/user-attachments/assets/9dc18504-6524-4186-85e5-4304968547c8" /><br/>
+
+- On the main cluster (dc2) side, the peer (dc1) and the imported service should be shown.<br/>
+<img width="1166" alt="Screenshot 2025-04-01 at 12 13 09 PM" src="https://github.com/user-attachments/assets/9ad0257a-da51-4504-89ab-f55197669440" /><br/>
+
+- Now, we can see the two instances of the stock-service. The instance deployed in the main cluster and the exported instance from the peer cluster.<br/>
+<img width="1152" alt="Screenshot 2025-04-01 at 12 13 31 PM" src="https://github.com/user-attachments/assets/b61daffb-075f-4328-b58c-b710d557eab3" /><br/>
+
+- Finally, a failover should be enabled from the main cluster with the peer cluster (dc1) as a failover target.<br/>
+<img width="472" alt="Screenshot 2025-04-01 at 12 25 10 PM" src="https://github.com/user-attachments/assets/848821c8-0f23-4acb-8cdb-f559d6bd8cf1" /><br/>
+
+
 
 ## Authors
 
