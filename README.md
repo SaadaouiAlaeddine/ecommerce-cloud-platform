@@ -221,10 +221,10 @@ Kafka is deployed to enable realtime validation and processing of regular orders
 - Now, we can see the two instances of the stock-service. The instance deployed in the main cluster and the exported instance from the peer cluster.<br/>
 <img width="1152" alt="Screenshot 2025-04-01 at 12 13 31 PM" src="https://github.com/user-attachments/assets/b61daffb-075f-4328-b58c-b710d557eab3" /><br/>
 
-- Finally, a failover should be enabled from the main cluster with the peer cluster (dc1) as a failover target.<br/>
+- A failover should be enabled from the main cluster with the peer cluster (dc1) as a failover target.<br/>
 <img width="472" alt="Screenshot 2025-04-01 at 12 25 10 PM" src="https://github.com/user-attachments/assets/848821c8-0f23-4acb-8cdb-f559d6bd8cf1" /><br/>
 
-
+- Finally, to get a fully functional B/G deployment. All the services should be deployed in both clusters and the previous steps should be implemented symmetrically on both sides.<br/>
 
 ## Authors
 
