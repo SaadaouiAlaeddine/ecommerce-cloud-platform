@@ -24,7 +24,7 @@ def get_public_key(jwt_token):
         return public_key
     else:
         logger.info(f"Public key for {kid} not found in Redis")
-
+    logger.info(f"Retrieving key from Keycloak url: {keycloak.KEYCLOAK_URL}")
     response = requests.get(keycloak.KEYCLOAK_URL)
     jwks = response.json()
 
@@ -69,7 +69,7 @@ def verify_jwt(jwt_token):
         decoded_token = jwt.decode(jwt_token, public_key, algorithms=["RS256"], options={"verify_aud": False})
         logger.info("JWT Verified Successfully!")
         logger.info(json.dumps(decoded_token, indent=2))
-        if 'order-creator-role' in decoded_token.get('scope', ''):
+        if 'order-creator-client-scope' in decoded_token.get('scope', ''):
                 # User is authorized to create orders
                 logger.info("User is authorized to create orders")
                 return True

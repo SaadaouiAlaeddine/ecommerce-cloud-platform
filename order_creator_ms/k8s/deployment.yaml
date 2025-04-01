@@ -36,9 +36,9 @@ spec:
           - name: RABBITMQ_USERNAME
             value: "admin"
           - name: RABBITMQ_PASSWORD
-            value: "adminpassword"
+            value: "admin"
           - name: RABBITMQ_VHOST
-            value: "/"
+            value: "ecommerce"
           - name: REDIS_HOST
             value: "redis.redis.svc.cluster.local"
           - name: REDIS_PORT
@@ -48,7 +48,7 @@ spec:
           - name: KEYCLOAK_HOST
             value: "keycloak.keycloak.svc.cluster.local"
           - name: KEYCLOAK_REALM
-            value: "order-management-realm"
+            value: "ecommerce-realm"
         resources:
           requests:
             cpu: "100m"     # Minimum 100m (0.1 core)
